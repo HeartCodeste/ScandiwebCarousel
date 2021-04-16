@@ -12,12 +12,27 @@ module.exports = {
           {
             test: /\.(js|jsx)$/,
             exclude: /node_modules/,
-            resolve: {extensions: ['.js','.jsx'] },
             use: [{
               loader: "babel-loader",
             }],
           },
+          { 
+              test: /\.tsx?$/, 
+              exclude: /node_modules/,
+              loader: 'ts-loader' 
+          },
+          {
+            test: /\.s[ac]ss$/i,
+            use: [
+              "style-loader",
+              "css-loader",
+              "sass-loader",
+            ],
+          },
         ],
+      },
+      resolve: {
+        extensions: ['*', '.js', '.jsx', '.ts', '.tsx'],
       },
       plugins: [
         new HtmlWebpackPlugin({
