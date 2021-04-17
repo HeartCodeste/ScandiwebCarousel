@@ -5,6 +5,7 @@ import { data } from "./data";
 const App = () => {
   return (
     <div className="wrapper">
+      <Carousel items={data} visibleSlidesCount={3} />
       <Carousel items={data} />
     </div>
   );
