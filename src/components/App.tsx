@@ -1,11 +1,13 @@
-import React, { Component } from 'react';
+import React from "react";
+import Carousel from "./Carousel";
+import { data } from "./data";
 
-export default class App extends Component {
-    render() {
-        return (
-            <div>
-                <h1>Scandiweb Carousel</h1>
-            </div>
-        );
-    }
-}
+const App = () => {
+  return (
+    <div className="wrapper">
+      <Carousel items={data} />
+    </div>
+  );
+};
+
+export default App;
