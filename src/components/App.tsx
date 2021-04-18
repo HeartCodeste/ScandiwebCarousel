@@ -7,8 +7,9 @@ import { dataText } from "./dataText";
 const App = () => {
   return (
     <div className="wrapper">
-      <Carousel items={dataPicture} visibleSlidesCount={3} infinite/>
-      <Carousel items={dataPicture} infinite/>
+      <Carousel items={dataPicture} visibleSlidesCount={3} infinite />
+      <Carousel items={dataPicture} infinite />
+      <Carousel items={dataPicture} infinite autoslide />
       <Carousel items={dataHero} />
       <Carousel items={dataText} />
     </div>

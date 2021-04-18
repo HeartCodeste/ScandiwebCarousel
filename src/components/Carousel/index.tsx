@@ -11,6 +11,7 @@ interface CarouselProps {
   items: CarouselItem[];
   visibleSlidesCount?: number;
   infinite?: boolean;
+  autoslide?: boolean;
 }
 
 interface CarouselState {
@@ -22,10 +23,30 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
     currentSlide: 0,
   };
   carouselContainerRef = React.createRef<HTMLDivElement>();
+  slideInterval: NodeJS.Timeout;
 
   componentDidMount() {
     this.handlePick(0);
+    if (this.props.autoslide) {
+      this.startAutoslide();
+    }
   }
+  componentDidUpdate(prevProps: CarouselProps) {
+    if (this.props.autoslide !== prevProps.autoslide) {
+      if (this.props.autoslide) {
+        this.startAutoslide();
+      } else {
+        clearInterval(this.slideInterval);
+      }
+    }
+  }
+
+  startAutoslide = () => {
+    this.slideInterval = setInterval(() => {
+      this.handlePick(this.state.currentSlide + 1);
+    }, 3000);
+  };
+
   handleLeft = () => {
     this.handlePick(this.state.currentSlide - 1);
   };
