@@ -39,6 +39,12 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
         clearInterval(this.slideInterval);
       }
     }
+    if (
+      this.props.visibleSlidesCount !== prevProps.visibleSlidesCount ||
+      this.props.infinite !== prevProps.infinite
+    ) {
+      this.handlePick(this.state.currentSlide);
+    }
   }
 
   startAutoslide = () => {
@@ -129,7 +135,11 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
             items
               .slice(0, realVisibleSlidesCount)
               .map((item) => (
-                <Slide content={item.content} slideWidth={slideWidth} />
+                <Slide
+                  key={item.id}
+                  content={item.content}
+                  slideWidth={slideWidth}
+                />
               ))}
         </div>
         <div className="carousel__dot-container">

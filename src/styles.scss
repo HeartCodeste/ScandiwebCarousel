@@ -11,6 +11,10 @@ body {
   max-width: 62rem;
   margin: 0 auto;
 }
-
+.configurable-carousel {
+  background-color: rgb(231, 231, 231);
+  padding: 1rem;
+}
 @import "./components/Carousel/style.scss";
 @import "./components/dataStyle.scss";
+@import "./components/Navbar/style.scss";
