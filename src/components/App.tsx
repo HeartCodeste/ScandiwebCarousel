@@ -1,12 +1,16 @@
 import React from "react";
 import Carousel from "./Carousel";
-import { data } from "./data";
+import { dataPicture } from "./dataPicture";
+import { dataHero } from "./dataHero";
+import { dataText } from "./dataText";
 
 const App = () => {
   return (
     <div className="wrapper">
-      <Carousel items={data} visibleSlidesCount={3} />
-      <Carousel items={data} />
+      <Carousel items={dataPicture} visibleSlidesCount={3} />
+      <Carousel items={dataPicture} />
+      <Carousel items={dataHero} />
+      <Carousel items={dataText} />
     </div>
   );
 };

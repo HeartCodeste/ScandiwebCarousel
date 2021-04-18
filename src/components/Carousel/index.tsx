@@ -63,7 +63,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
             onClick={this.handleLeft}
             className="carousel__navigation-arrow carousel__navigation-arrow--left"
           >
-            &lt;
+            <i className="fas fa-angle-left"></i>
           </button>
         )}
         <div className="carousel__content" ref={this.carouselContainerRef}>
@@ -75,20 +75,22 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
             />
           ))}
         </div>
-        {selectedItems.map((item, i) => (
-          <Dot
-            key={item.id}
-            handlePick={this.handlePick}
-            currentIndex={i}
-            currentSlide={currentSlide}
-          />
-        ))}
+        <div className="carousel__dot-container">
+          {selectedItems.map((item, i) => (
+            <Dot
+              key={item.id}
+              handlePick={this.handlePick}
+              currentIndex={i}
+              currentSlide={currentSlide}
+            />
+          ))}
+        </div>
         {currentSlide < items.length - realVisibleSlidesCount && (
           <button
             onClick={this.handleRight}
             className="carousel__navigation-arrow carousel__navigation-arrow--right"
           >
-            &gt;
+            <i className="fas fa-angle-right"></i>
           </button>
         )}
       </div>

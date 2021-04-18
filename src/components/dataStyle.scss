@@ -1,0 +1,200 @@
+.picture {
+  width: 100%;
+}
+.hero {
+  position: relative;
+  text-align: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 18.75rem;
+
+  @media (min-width: 576px) {
+    height: 28.125rem;
+  }
+  @media (min-width: 768px) {
+    height: 34.375rem;
+  }
+  @media (min-width: 992px) {
+    height: 36.25rem;
+  }
+
+  &__image {
+    width: 100%;
+  }
+  &__content {
+    color: white;
+  }
+  &__title {
+    font-size: 2.2rem;
+    @media (min-width: 576px) {
+      font-size: 2.8rem;
+    }
+    @media (min-width: 768px) {
+      font-size: 3.3rem;
+    }
+
+    @media (min-width: 992px) {
+      font-size: 4rem;
+    }
+  }
+  &__description {
+    @media (min-width: 576px) {
+      font-size: 1.1rem;
+    }
+  }
+  &__read-more {
+    background: white;
+    border: none;
+    padding: 0.56rem;
+    font-size: 1.02rem;
+    margin: 0.94rem 0;
+    cursor: pointer;
+    border-radius: 5%;
+    color: rgb(65, 65, 65);
+    transition: background-color 0.3s;
+    @media (min-width: 576px) {
+      padding: 0.625rem;
+      font-size: 1.03rem;
+    }
+    @media (min-width: 768px) {
+      font-size: 1.05rem;
+    }
+
+    @media (min-width: 992px) {
+      font-size: 1.1rem;
+    }
+    &:hover {
+      background-color: rgb(219, 219, 219);
+    }
+  }
+  &__background {
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4);
+  }
+}
+.blockquote {
+  padding: 3.06rem 2.5rem;
+  background: rgb(236, 228, 255);
+  border: 1px solid rgb(183, 155, 247);
+  border-left-width: 1.25rem;
+  color: rgb(11, 0, 37);
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+  &::before {
+    display: none;
+    content: "\201c";
+    font-family: serif;
+
+    margin: -2.5rem 0;
+    @media (min-width: 576px) {
+      font-size: 9rem;
+      display: block;
+    }
+    @media (min-width: 768px) {
+      font-size: 10rem;
+    }
+  }
+
+  &__text {
+    font-size: 1.3rem;
+    font-style: italic;
+    @media (min-width: 576px) {
+      font-size: 1.4rem;
+    }
+    @media (min-width: 768px) {
+      font-size: 1.5rem;
+    }
+  }
+  &__author {
+    font-weight: bold;
+    text-align: right;
+    &::before {
+      content: "\2014\0020";
+    }
+  }
+}
+.table-container {
+  position: relative;
+  overflow-x: auto;
+}
+.table-content {
+  border-collapse: collapse;
+  width: 100%;
+  height: 100%;
+
+  &__heading {
+    text-align: left;
+    background-color: rgb(0, 50, 107);
+    color: white;
+  }
+  th,
+  td {
+    padding: 1.25rem 1rem;
+    @media (min-width: 576px) {
+      padding: 1.25rem;
+    }
+  }
+  tbody {
+    tr {
+      border-bottom: 1px solid rgb(197, 197, 197);
+      transition: background-color 0.3s;
+    }
+    tr:nth-child(even) {
+      background-color: rgb(219, 218, 218);
+    }
+    tr:last-child {
+      border-bottom: 2px solid rgb(0, 50, 107);
+    }
+    tr:hover {
+      background-color: rgb(204, 224, 247);
+    }
+  }
+}
+.custom-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(250, 223, 226, 0.26);
+  &__container {
+    box-shadow: 0 0 1.25rem rgba(0, 0, 0, 0.4);
+    text-align: center;
+    color: white;
+    max-width: 31.25rem;
+    max-height: 31.25rem;
+    h3 {
+      background-color: rgb(117, 17, 34);
+      border-top-left-radius: 0.31rem;
+      border-top-right-radius: 0.31rem;
+      padding: 0.625rem;
+    }
+  }
+  &__content {
+    color: black;
+    transition: opacity 0.3s;
+    &:hover li {
+      opacity: 0.2;
+    }
+    li {
+      padding: 1.375rem;
+      list-style-type: none;
+      width: 100%;
+      border-bottom: 1px solid rgb(236, 236, 236);
+      transition: opacity 0.3s, transform 0.3s, background-color 0.3s,
+        color 0.3s;
+    }
+    li:last-child {
+      border-bottom: 0.25rem solid rgb(117, 17, 34);
+    }
+    li:hover {
+      transform: scale(1.1);
+      z-index: 2;
+      background-color: rgb(46, 2, 9);
+      color: white;
+      opacity: 1;
+    }
+  }
+}
