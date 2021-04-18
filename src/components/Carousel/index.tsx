@@ -34,6 +34,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
     if (this.props.autoslide) {
       this.startAutoslide();
     }
+    window.addEventListener("resize", this.handleResize);
   }
   componentDidUpdate(prevProps: CarouselProps) {
     if (this.props.autoslide !== prevProps.autoslide) {
@@ -47,10 +48,15 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
       this.props.visibleSlidesCount !== prevProps.visibleSlidesCount ||
       this.props.infinite !== prevProps.infinite
     ) {
-      this.handlePick(this.state.currentSlide);
+      this.handlePick(this.state.currentSlide, true);
     }
   }
-
+  componentWillUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  }
+  handleResize = () => {
+    this.handlePick(this.state.currentSlide, true);
+  };
   startAutoslide = () => {
     this.slideInterval = setInterval(() => {
       this.handlePick(this.state.currentSlide + 1);
@@ -65,7 +71,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
     this.handlePick(this.state.currentSlide + 1);
   };
 
-  handlePick = (currentIndex: number) => {
+  handlePick = (currentIndex: number, instantScroll?: boolean) => {
     const currentSlide = currentIndex;
     const { visibleSlidesCount, items, infinite } = this.props;
     const slideWidth =
@@ -78,7 +84,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
         left: infinite
           ? (this.state.currentSlide + 1) * slideWidth
           : this.state.currentSlide * slideWidth,
-        behavior: "smooth",
+        behavior: instantScroll ? "auto" : "smooth",
       });
       if (infinite) {
         if (currentSlide > items.length - 1) {
