@@ -10,6 +10,7 @@ export interface CarouselItem {
 interface CarouselProps {
   items: CarouselItem[];
   visibleSlidesCount?: number;
+  infinite?: boolean;
 }
 
 interface CarouselState {
@@ -22,6 +23,9 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
   };
   carouselContainerRef = React.createRef<HTMLDivElement>();
 
+  componentDidMount() {
+    this.handlePick(0);
+  }
   handleLeft = () => {
     this.handlePick(this.state.currentSlide - 1);
   };
@@ -32,7 +36,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
 
   handlePick = (currentIndex: number) => {
     const currentSlide = currentIndex;
-    const { visibleSlidesCount } = this.props;
+    const { visibleSlidesCount, items, infinite } = this.props;
     const slideWidth =
       visibleSlidesCount > 0
         ? this.carouselContainerRef.current.clientWidth / visibleSlidesCount
@@ -40,25 +44,45 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
     this.setState({ currentSlide }, () => {
       this.carouselContainerRef.current.scrollTo({
         top: 0,
-        left: this.state.currentSlide * slideWidth,
+        left: infinite
+          ? (this.state.currentSlide + 1) * slideWidth
+          : this.state.currentSlide * slideWidth,
         behavior: "smooth",
       });
+      if (infinite) {
+        if (currentSlide > items.length - 1) {
+          setTimeout(() => {
+            this.setState({ currentSlide: 0 });
+            this.carouselContainerRef.current.scrollTo({
+              top: 0,
+              left: slideWidth,
+            });
+          }, 500);
+        } else if (currentSlide === -1) {
+          setTimeout(() => {
+            this.setState({ currentSlide: items.length - 1 });
+            this.carouselContainerRef.current.scrollTo({
+              top: 0,
+              left: slideWidth * items.length,
+            });
+          }, 500);
+        }
+      }
     });
   };
 
   render() {
-    const { items, visibleSlidesCount } = this.props;
+    const { items, visibleSlidesCount, infinite } = this.props;
     const { currentSlide } = this.state;
     const realVisibleSlidesCount =
       visibleSlidesCount > 0 ? visibleSlidesCount : 1;
     const slideWidth = 100 / realVisibleSlidesCount;
-    const selectedItems = items.slice(
-      0,
-      items.length - realVisibleSlidesCount + 1
-    );
+    const selectedItems = infinite
+      ? items
+      : items.slice(0, items.length - realVisibleSlidesCount + 1);
     return (
       <div className="carousel">
-        {currentSlide > 0 && (
+        {(currentSlide > 0 || infinite) && (
           <button
             onClick={this.handleLeft}
             className="carousel__navigation-arrow carousel__navigation-arrow--left"
@@ -67,6 +91,12 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
           </button>
         )}
         <div className="carousel__content" ref={this.carouselContainerRef}>
+          {infinite && (
+            <Slide
+              content={items[items.length - 1].content}
+              slideWidth={slideWidth}
+            />
+          )}
           {items.map((item) => (
             <Slide
               key={item.id}
@@ -74,6 +104,12 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
               slideWidth={slideWidth}
             />
           ))}
+          {infinite &&
+            items
+              .slice(0, realVisibleSlidesCount)
+              .map((item) => (
+                <Slide content={item.content} slideWidth={slideWidth} />
+              ))}
         </div>
         <div className="carousel__dot-container">
           {selectedItems.map((item, i) => (
@@ -85,7 +121,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
             />
           ))}
         </div>
-        {currentSlide < items.length - realVisibleSlidesCount && (
+        {(currentSlide < items.length - realVisibleSlidesCount || infinite) && (
           <button
             onClick={this.handleRight}
             className="carousel__navigation-arrow carousel__navigation-arrow--right"
