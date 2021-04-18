@@ -11,6 +11,8 @@ const App = () => {
   const [autoslide, setAutoslide] = useState<boolean>(true);
   return (
     <div className="wrapper">
+      <h1 className="heading">Carousel component project</h1>
+      <h2 className="heading">Configurable carousel</h2>
       <div className="configurable-carousel">
         <Navbar
           visibleSlidesCount={visibleSlidesCount}
@@ -27,7 +29,9 @@ const App = () => {
           autoslide={autoslide}
         />
       </div>
+      <h2 className="heading">Hero image carousel</h2>
       <Carousel items={dataHero} />
+      <h2 className="heading">Text carousel</h2>
       <Carousel items={dataText} />
     </div>
   );

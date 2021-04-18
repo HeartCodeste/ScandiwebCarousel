@@ -13,6 +13,22 @@ const Navbar = (props: NavbarProps) => {
   const [dropdownVisibility, setDropdownVisibility] = useState<boolean>(false);
   return (
     <div className="navbar">
+      <button
+        onClick={() => props.onInfiniteChange(!props.infinite)}
+        className={
+          props.infinite ? "navbar__btn navbar__btn--active" : "navbar__btn"
+        }
+      >
+        infinite
+      </button>
+      <button
+        onClick={() => props.onAutoslideChange(!props.autoslide)}
+        className={
+          props.autoslide ? "navbar__btn navbar__btn--active" : "navbar__btn"
+        }
+      >
+        autoslide
+      </button>
       <div className="dropdown">
         <button
           onClick={() => {
@@ -20,7 +36,7 @@ const Navbar = (props: NavbarProps) => {
           }}
           className="navbar__btn"
         >
-          Number of slides
+          number of slides
         </button>
         <ul
           className={
@@ -91,22 +107,6 @@ const Navbar = (props: NavbarProps) => {
           </li>
         </ul>
       </div>
-      <button
-        onClick={() => props.onInfiniteChange(!props.infinite)}
-        className={
-          props.infinite ? "navbar__btn navbar__btn--active" : "navbar__btn"
-        }
-      >
-        Infinite
-      </button>
-      <button
-        onClick={() => props.onAutoslideChange(!props.autoslide)}
-        className={
-          props.autoslide ? "navbar__btn navbar__btn--active" : "navbar__btn"
-        }
-      >
-        Autoslide
-      </button>
     </div>
   );
 };
