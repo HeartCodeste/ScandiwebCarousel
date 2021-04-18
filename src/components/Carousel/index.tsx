@@ -16,11 +16,15 @@ interface CarouselProps {
 
 interface CarouselState {
   currentSlide: number;
+  swipeStartPosition: number;
+  swipeMovePosition: number;
 }
 
 class Carousel extends PureComponent<CarouselProps, CarouselState> {
   state: CarouselState = {
     currentSlide: 0,
+    swipeStartPosition: 0,
+    swipeMovePosition: 0,
   };
   carouselContainerRef = React.createRef<HTMLDivElement>();
   slideInterval: NodeJS.Timeout;
@@ -97,7 +101,21 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
       }
     });
   };
-
+  handleSwipe = () => {
+    const { swipeStartPosition, swipeMovePosition, currentSlide } = this.state;
+    const { visibleSlidesCount, items, infinite } = this.props;
+    const realVisibleSlidesCount =
+      visibleSlidesCount > 0 ? visibleSlidesCount : 1;
+    if (swipeMovePosition < swipeStartPosition) {
+      if (currentSlide < items.length - realVisibleSlidesCount || infinite) {
+        this.handleRight();
+      }
+    } else if (swipeMovePosition > swipeStartPosition) {
+      if (currentSlide > 0 || infinite) {
+        this.handleLeft();
+      }
+    }
+  };
   render() {
     const { items, visibleSlidesCount, infinite } = this.props;
     const { currentSlide } = this.state;
@@ -117,7 +135,22 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
             <i className="fas fa-angle-left"></i>
           </button>
         )}
-        <div className="carousel__content" ref={this.carouselContainerRef}>
+        <div
+          onTouchStart={(ev) =>
+            this.setState({ swipeStartPosition: ev.targetTouches[0].clientX })
+          }
+          onTouchMove={(ev) =>
+            this.setState({ swipeMovePosition: ev.targetTouches[0].clientX })
+          }
+          onTouchEnd={this.handleSwipe}
+          onMouseDown={(ev) =>
+            this.setState({ swipeStartPosition: ev.clientX })
+          }
+          onMouseMove={(ev) => this.setState({ swipeMovePosition: ev.clientX })}
+          onMouseUp={this.handleSwipe}
+          className="carousel__content"
+          ref={this.carouselContainerRef}
+        >
           {infinite && (
             <Slide
               content={items[items.length - 1].content}
