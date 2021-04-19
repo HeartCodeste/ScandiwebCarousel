@@ -53,6 +53,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
   }
   componentWillUnmount() {
     window.removeEventListener("resize", this.handleResize);
+    clearInterval(this.slideInterval);
   }
   handleResize = () => {
     this.handlePick(this.state.currentSlide, true);

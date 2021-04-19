@@ -10,16 +10,17 @@
     background-color: rgb(245, 245, 245);
     border-radius: 0.8rem;
     border: none;
+    outline: none;
     cursor: pointer;
     transition: background-color 0.3s;
-    @media (min-width: 576px) {
+    @include from-small-screen {
       padding: 0.625rem;
     }
-    @media (min-width: 768px) {
+    @include from-medium-screen {
       font-size: 1.1rem;
       margin: 1rem;
     }
-    @media (min-width: 992px) {
+    @include from-large-screen {
       font-size: 1.2rem;
     }
     &--active {
@@ -54,14 +55,15 @@
     margin: 0.2rem;
     border-radius: 0.8rem;
     cursor: pointer;
+    outline: none;
     transition: background-color 0.3s;
-    @media (min-width: 576px) {
+    @include from-small-screen {
       padding: 0.5rem 1.3rem;
     }
-    @media (min-width: 768px) {
+    @include from-medium-screen {
       font-size: 1rem;
     }
-    @media (min-width: 992px) {
+    @include from-large-screen {
       font-size: 1.1rem;
     }
     &--active {
