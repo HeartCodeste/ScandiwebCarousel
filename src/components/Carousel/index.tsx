@@ -18,6 +18,7 @@ interface CarouselState {
   currentSlide: number;
   swipeStartPosition: number;
   swipeMovePosition: number;
+  isSwiping: boolean;
 }
 
 class Carousel extends PureComponent<CarouselProps, CarouselState> {
@@ -25,6 +26,7 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
     currentSlide: 0,
     swipeStartPosition: 0,
     swipeMovePosition: 0,
+    isSwiping: false,
   };
   carouselContainerRef = React.createRef<HTMLDivElement>();
   slideInterval: NodeJS.Timeout;
@@ -75,6 +77,14 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
   handlePick = (currentIndex: number, instantScroll?: boolean) => {
     const currentSlide = currentIndex;
     const { visibleSlidesCount, items, infinite } = this.props;
+
+    if (
+      !infinite &&
+      (currentIndex < 0 || currentIndex > items.length - visibleSlidesCount)
+    ) {
+      return;
+    }
+
     const slideWidth =
       visibleSlidesCount > 0
         ? this.carouselContainerRef.current.clientWidth / visibleSlidesCount
@@ -89,21 +99,27 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
       });
       if (infinite) {
         if (currentSlide > items.length - 1) {
-          setTimeout(() => {
-            this.setState({ currentSlide: 0 });
-            this.carouselContainerRef.current.scrollTo({
-              top: 0,
-              left: slideWidth,
-            });
-          }, 500);
+          setTimeout(
+            () => {
+              this.setState({ currentSlide: 0 });
+              this.carouselContainerRef.current.scrollTo({
+                top: 0,
+                left: slideWidth,
+              });
+            },
+            instantScroll ? 0 : 500
+          );
         } else if (currentSlide === -1) {
-          setTimeout(() => {
-            this.setState({ currentSlide: items.length - 1 });
-            this.carouselContainerRef.current.scrollTo({
-              top: 0,
-              left: slideWidth * items.length,
-            });
-          }, 500);
+          setTimeout(
+            () => {
+              this.setState({ currentSlide: items.length - 1 });
+              this.carouselContainerRef.current.scrollTo({
+                top: 0,
+                left: slideWidth * items.length,
+              });
+            },
+            instantScroll ? 0 : 500
+          );
         }
       }
     });
@@ -121,6 +137,33 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
       if (currentSlide > 0 || infinite) {
         this.handleLeft();
       }
+    }
+    this.setState({ isSwiping: false });
+  };
+  handleSwipeFollowing = (position: number) => {
+    if (this.state.isSwiping) {
+      const newSwipePosition = this.state.swipeMovePosition - position;
+      this.carouselContainerRef.current.scrollTo({
+        top: 0,
+        left: this.carouselContainerRef.current.scrollLeft + newSwipePosition,
+      });
+      const swipeLength = this.state.swipeStartPosition - position;
+      const slideWidth =
+        this.props.visibleSlidesCount > 0
+          ? this.carouselContainerRef.current.clientWidth /
+            this.props.visibleSlidesCount
+          : this.carouselContainerRef.current.clientWidth;
+      if (Math.abs(swipeLength) >= slideWidth) {
+        const slideMoveCount = Math.floor(Math.abs(swipeLength) / slideWidth);
+        if (swipeLength > 0) {
+          this.handlePick(this.state.currentSlide + slideMoveCount, true);
+          this.setState({ swipeStartPosition: position });
+        } else if (swipeLength < 0) {
+          this.handlePick(this.state.currentSlide - slideMoveCount, true);
+          this.setState({ swipeStartPosition: position });
+        }
+      }
+      this.setState({ swipeMovePosition: position });
     }
   };
   render() {
@@ -144,16 +187,24 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
         )}
         <div
           onTouchStart={(ev) =>
-            this.setState({ swipeStartPosition: ev.targetTouches[0].clientX })
+            this.setState({
+              swipeStartPosition: ev.targetTouches[0].clientX,
+              swipeMovePosition: ev.targetTouches[0].clientX,
+              isSwiping: true,
+            })
           }
           onTouchMove={(ev) =>
-            this.setState({ swipeMovePosition: ev.targetTouches[0].clientX })
+            this.handleSwipeFollowing(ev.targetTouches[0].clientX)
           }
           onTouchEnd={this.handleSwipe}
           onMouseDown={(ev) =>
-            this.setState({ swipeStartPosition: ev.clientX })
+            this.setState({
+              swipeStartPosition: ev.clientX,
+              swipeMovePosition: ev.clientX,
+              isSwiping: true,
+            })
           }
-          onMouseMove={(ev) => this.setState({ swipeMovePosition: ev.clientX })}
+          onMouseMove={(ev) => this.handleSwipeFollowing(ev.clientX)}
           onMouseUp={this.handleSwipe}
           className="carousel__content"
           ref={this.carouselContainerRef}
