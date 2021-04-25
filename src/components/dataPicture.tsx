@@ -1,7 +1,6 @@
 import React from "react";
-import { CarouselItem } from "./Carousel";
 
-export const dataPicture: CarouselItem[] = [
+export const dataPicture = [
   {
     id: 1,
     content: (

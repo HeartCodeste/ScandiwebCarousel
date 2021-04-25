@@ -1,14 +1,7 @@
 import React, { PureComponent } from "react";
-import Slide from "./Slide";
 import Dot from "./Dot";
 
-export interface CarouselItem {
-  id: number;
-  content: JSX.Element;
-}
-
 interface CarouselProps {
-  items: CarouselItem[];
   visibleSlidesCount?: number;
   infinite?: boolean;
   autoslide?: boolean;
@@ -76,8 +69,8 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
 
   handlePick = (currentIndex: number, instantScroll?: boolean) => {
     const currentSlide = currentIndex;
-    const { visibleSlidesCount, items, infinite } = this.props;
-
+    const { visibleSlidesCount, infinite, children } = this.props;
+    const items = React.Children.toArray(children);
     if (
       !infinite &&
       (currentIndex < 0 || currentIndex > items.length - visibleSlidesCount)
@@ -126,7 +119,8 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
   };
   handleSwipe = () => {
     const { swipeStartPosition, swipeMovePosition, currentSlide } = this.state;
-    const { visibleSlidesCount, items, infinite } = this.props;
+    const { visibleSlidesCount, infinite, children } = this.props;
+    const items = React.Children.toArray(children);
     const realVisibleSlidesCount =
       visibleSlidesCount > 0 ? visibleSlidesCount : 1;
     if (swipeMovePosition < swipeStartPosition) {
@@ -167,11 +161,12 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
     }
   };
   render() {
-    const { items, visibleSlidesCount, infinite } = this.props;
+    const { visibleSlidesCount, infinite, children } = this.props;
     const { currentSlide } = this.state;
     const realVisibleSlidesCount =
       visibleSlidesCount > 0 ? visibleSlidesCount : 1;
     const slideWidth = 100 / realVisibleSlidesCount;
+    const items = React.Children.toArray(children);
     const selectedItems = infinite
       ? items
       : items.slice(0, items.length - realVisibleSlidesCount + 1);
@@ -209,34 +204,30 @@ class Carousel extends PureComponent<CarouselProps, CarouselState> {
           className="carousel__content"
           ref={this.carouselContainerRef}
         >
-          {infinite && (
-            <Slide
-              content={items[items.length - 1].content}
-              slideWidth={slideWidth}
-            />
+          {infinite &&
+            (React.isValidElement(items[items.length - 1])
+              ? React.cloneElement(items[items.length - 1] as any, {
+                  slideWidth,
+                })
+              : null)}
+          {items.map((item) =>
+            React.isValidElement(item)
+              ? React.cloneElement(item, { slideWidth })
+              : null
           )}
-          {items.map((item) => (
-            <Slide
-              key={item.id}
-              content={item.content}
-              slideWidth={slideWidth}
-            />
-          ))}
           {infinite &&
             items
               .slice(0, realVisibleSlidesCount)
-              .map((item) => (
-                <Slide
-                  key={item.id}
-                  content={item.content}
-                  slideWidth={slideWidth}
-                />
-              ))}
+              .map((item) =>
+                React.isValidElement(item)
+                  ? React.cloneElement(item, { slideWidth })
+                  : null
+              )}
         </div>
         <div className="carousel__dot-container">
           {selectedItems.map((item, i) => (
             <Dot
-              key={item.id}
+              key={i}
               handlePick={this.handlePick}
               currentIndex={i}
               currentSlide={currentSlide}

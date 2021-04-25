@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import Carousel from "./Carousel";
+import Slide from "./Carousel/Slide";
 import { dataPicture } from "./dataPicture";
 import { dataHero } from "./dataHero";
 import { dataText } from "./dataText";
@@ -23,16 +24,27 @@ const App = () => {
           onAutoslideChange={setAutoslide}
         />
         <Carousel
-          items={dataPicture}
           visibleSlidesCount={visibleSlidesCount}
           infinite={infinite}
           autoslide={autoslide}
-        />
+        >
+          {dataPicture.map((item) => (
+            <Slide key={item.id}>{item.content}</Slide>
+          ))}
+        </Carousel>
       </div>
       <h2 className="heading">Hero image carousel</h2>
-      <Carousel items={dataHero} />
+      <Carousel>
+        {dataHero.map((item) => (
+          <Slide key={item.id}>{item.content}</Slide>
+        ))}
+      </Carousel>
       <h2 className="heading">Text carousel</h2>
-      <Carousel items={dataText} />
+      <Carousel>
+        {dataText.map((item) => (
+          <Slide key={item.id}>{item.content}</Slide>
+        ))}
+      </Carousel>
     </div>
   );
 };

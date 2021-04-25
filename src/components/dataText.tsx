@@ -1,7 +1,6 @@
 import React from "react";
-import { CarouselItem } from "./Carousel";
 
-export const dataText: CarouselItem[] = [
+export const dataText = [
   {
     id: 1,
     content: (

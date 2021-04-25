@@ -1,5 +1,4 @@
 import React from "react";
-import { CarouselItem } from "./Carousel";
 
 const createBackground = (backgroundImage: string) => {
   return {
@@ -7,7 +6,7 @@ const createBackground = (backgroundImage: string) => {
   };
 };
 
-export const dataHero: CarouselItem[] = [
+export const dataHero = [
   {
     id: 1,
     content: (

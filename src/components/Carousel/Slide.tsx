@@ -1,14 +1,14 @@
 import React from "react";
 
 interface SlideProps {
-  content: JSX.Element;
-  slideWidth: number;
+  children: React.ReactElement;
+  slideWidth?: number;
 }
 
-const Slide = ({ content, slideWidth }: SlideProps) => {
+const Slide = ({ children, slideWidth }: SlideProps) => {
   return (
     <div className="carousel__slide" style={{ width: `${slideWidth}%` }}>
-      {content}
+      {children}
     </div>
   );
 };
